@@ -107,3 +107,6 @@ void loop() {
 }
 
 https://www.tinkercad.com/things/bEzW0rxxLcM-cool-bombul/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard&sharecode=RA36k2pzXn7skN4pp9Bcrdy8sy3EGcTC2NEyWfLlsSM
+
+<img width="521" height="317" alt="image" src="https://github.com/user-attachments/assets/9737c1b7-218b-41d2-b63b-bfa6e618947c" />
+<img width="1936" height="2528" alt="image" src="https://github.com/user-attachments/assets/b972cc76-881a-4884-b7d4-ac564f16b9d0" />
