@@ -110,3 +110,72 @@ https://www.tinkercad.com/things/bEzW0rxxLcM-cool-bombul/editel?returnTo=https%3
 
 <img width="521" height="317" alt="image" src="https://github.com/user-attachments/assets/9737c1b7-218b-41d2-b63b-bfa6e618947c" />
 <img width="1936" height="2528" alt="image" src="https://github.com/user-attachments/assets/b972cc76-881a-4884-b7d4-ac564f16b9d0" />
+
+# Actividad de Robotica del problema a resolver
+Mi problema es los robos en las tiendas y lo resolvi con un sistema de un sensor de movimiento que en las nochesve si hay moviemiento, y si lo hay prende la alarma
+
+// 1. Declaramos los pines según nuestras conexiones
+const int pinBoton = 2;   // El botón que simula "ya pasó la hora"
+const int pinPIR = 3;     // El sensor de movimiento
+const int pinLED = 4;     // La alarma visual
+const int pinPiezo = 5;   // La alarma sonora
+
+// 2. Variable para saber si el sistema está armado o no
+bool sistemaArmado = false; 
+
+void setup() {
+  Serial.begin(9600); // Iniciamos el monitor serial para ver mensajes
+  
+  // Configuramos los pines
+  pinMode(pinBoton, INPUT_PULLUP); // ¡Aquí usamos la magia del Pullup!
+  pinMode(pinPIR, INPUT);
+  pinMode(pinLED, OUTPUT);
+  pinMode(pinPiezo, OUTPUT);
+  
+  Serial.println("Sistema listo. Esperando que pase 1 hora (presiona el boton)...");
+}
+
+void loop() {
+  // --- LEER ENTRADA ---
+  // Leemos el botón. Como usamos PULLUP, presionado es LOW (0)
+  int estadoBoton = digitalRead(pinBoton);
+  
+  // Si el botón se presiona, "pasa la hora" y armamos el sistema
+  if (estadoBoton == LOW) {
+    sistemaArmado = true;
+    Serial.println("¡Ha pasado 1 hora! Sistema ARMADO.");
+    delay(500); // Pequeña pausa para que no se repita mil veces el mensaje
+  }
+
+  // --- PROCESAR CONDICIÓN Y GENERAR RESPUESTA ---
+  // Si el sistema está armado, revisamos el sensor PIR
+  if (sistemaArmado == true) {
+    
+    int movimiento = digitalRead(pinPIR); // Leemos el PIR
+    
+    if (movimiento == HIGH) {
+      // ¡Hay gente en la tienda! ¡Alarma!
+      digitalWrite(pinLED, HIGH);       // Encendemos el LED
+      tone(pinPiezo, 1000);             // Encendemos el Piezo a 1000Hz (sonido agudo)
+      Serial.println("🚨 ¡ALERTA! Movimiento detectado en el negocio. 🚨");
+    } 
+    else {
+      // No hay movimiento
+      digitalWrite(pinLED, LOW);        // Apagamos el LED
+      noTone(pinPiezo);                 // Apagamos el sonido
+      Serial.println("Sistema armado. Todo tranquilo. Sin movimiento.");
+    }
+  } 
+  else {
+    // Si el sistema no está armado, nos aseguramos de que todo esté apagado
+    digitalWrite(pinLED, LOW);
+    noTone(pinPiezo);
+  }
+  
+  delay(200); // Una pequeña espera para que la simulación corra suave
+}
+
+https://www.tinkercad.com/things/1VVVUxsVzAx-actividad-robotica-4/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard&sharecode=19MP_GYtnMz3lER7f3TItQ5zfiaf8NK4v-La3POHMO4
+
+<img width="533" height="353" alt="Captura de pantalla 2026-10-15 221818" src="https://github.com/user-attachments/assets/cb1e2356-a193-4d4f-8755-11f555116788" />
+
