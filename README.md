@@ -179,3 +179,60 @@ https://www.tinkercad.com/things/1VVVUxsVzAx-actividad-robotica-4/editel?returnT
 
 <img width="533" height="353" alt="Captura de pantalla 2026-10-15 221818" src="https://github.com/user-attachments/assets/cb1e2356-a193-4d4f-8755-11f555116788" />
 
+# Actividad 29 de octubre
+Imagen:
+<img width="1401" height="669" alt="image" src="https://github.com/user-attachments/assets/635465cc-74f1-40ee-89e6-e42b806264e3" />
+Codigo:
+#include <Servo.h>
+const int PIN_SERVO_1       = 9;
+const int PIN_SERVO_2       = 10;
+const int PIN_SERVO_3       = 11;
+const int PIN_PULSADOR      = 2;
+const int PIN_SWITCH        = 3;
+const int PIN_POTENCIOMETRO = A0;
+Servo servo1, servo2, servo3;
+bool barriendo = false;
+int posBarrido = 0;
+int direccion = 1;
+unsigned long ultimaVez = 0;
+const int INTERVALO = 15;
+bool pulsadorAnterior = HIGH;
+void setup() {
+ servo1.attach(PIN_SERVO_1);
+ servo2.attach(PIN_SERVO_2);
+ servo3.attach(PIN_SERVO_3);
+ pinMode(PIN_PULSADOR, INPUT_PULLUP);
+ pinMode(PIN_SWITCH,   INPUT_PULLUP);
+ servo1.write(0);
+ servo2.write(0);
+ servo3.write(90);
+}
+void loop() {
+ // ---- SERVO 1: pulsador → barrido 0°-180°-0° ----
+ bool pulsador = digitalRead(PIN_PULSADOR);
+ if (pulsadorAnterior == HIGH && pulsador == LOW) {
+   barriendo = true;
+   posBarrido = 0;
+   direccion = 1;
+ }
+ pulsadorAnterior = pulsador;
+ if (barriendo && (millis() - ultimaVez >= INTERVALO)) {
+   ultimaVez = millis();
+   servo1.write(posBarrido);
+   posBarrido += direccion;
+   if (posBarrido > 180) { posBarrido = 180; direccion = -1; }
+   if (posBarrido < 0)   { posBarrido = 0;   direccion = 1; barriendo = false; }
+ }
+ // ---- SERVO 2: switch → 0° o 180° ----
+ if (digitalRead(PIN_SWITCH) == LOW) {
+   servo2.write(0);
+ } else {
+   servo2.write(180);
+ }
+ // ---- SERVO 3: potenciómetro → posición proporcional ----
+ int lectura = analogRead(PIN_POTENCIOMETRO);
+ int angulo  = map(lectura, 0, 1023, 0, 180);
+ servo3.write(angulo);
+}
+Link:
+https://www.tinkercad.com/things/1JbouL03lKk/editel?returnTo=%2Fdashboard&sharecode=3JapxBF2w3UUPhyZF5SeWY07ZgF3mqgpUobJmfUKeBo
